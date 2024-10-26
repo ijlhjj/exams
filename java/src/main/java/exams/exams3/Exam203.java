@@ -1,0 +1,54 @@
+package exams.exams3;
+
+import exams.TreeNode;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * 203-二叉树的锯齿形层序遍历
+ *
+ * @author ijlhjj
+ * @version 1.0 2024-02-16
+ */
+public class Exam203 {
+
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> levels = new ArrayList<>(); //层遍历结果
+
+        //根节点不为空才处理
+        if (root != null) {
+            List<TreeNode> lastLevel = List.of(root); //最后一层节点
+            //最后一层不为空时循环处理
+            while (!lastLevel.isEmpty()) {
+                //把最后一层节点值加入结果列表
+                List<Integer> values = new ArrayList<>();
+                for (var node : lastLevel)
+                    values.add(node.val);
+                levels.add(values);
+
+                //处理最后一层的下层节点
+                List<TreeNode> nextLevel = new ArrayList<>();
+                for (var node : lastLevel) {
+                    //把最后一层不为null的子节点加入列表
+                    if (node.left != null) nextLevel.add(node.left);
+                    if (node.right != null) nextLevel.add(node.right);
+                }
+
+                lastLevel = nextLevel; //更新最后一层引用
+            }
+        }
+
+        //对层元素进行间隔逆序操作
+        boolean flag = true;
+        for (var level : levels) {
+            flag = !flag;
+            if (flag)
+                Collections.reverse(level);
+        }
+
+        return levels;
+    }
+
+}
